@@ -41,12 +41,14 @@ def getlinks(html):
 def finddir(rurl):
 	act = ' '
 	print 'You are currently in %s' % os.getcwd()
+	print 'The current sub-directories are: %s' % os.listdir('.')
 	act = raw_input('If this is the proper directory press enter, or type the name of the desired directory. ')
 	while act != '':
-		print 'The current sub-directories are: %s' % os.listdir('.')
 		act = 'Input the proper directory or one of the aforementioned: '
 		os.chdir(act)
 		act = raw_input('If this is the proper directory press enter, or type the name of the desired directory. ')
+		print 'You are currently in %s' % os.getcwd()
+		print 'The current sub-directories are: %s' % os.listdir('.')
 	os.mkdir(rurl)
 	os.chdir(rurl)
 	return
