@@ -12,7 +12,7 @@ def geturl():
 		return url, rurl, turl
 	elif url[0] == '@':
 		turl = 'instagram'
-		print '\nFinding '+ url +'s, Instagram this may take a while. \n'
+		print '\nFinding '+ url +'\'s, Instagram this may take a while. \n'
 		return url, rurl, turl
 	else:
 		turl = 'url'
