@@ -6,7 +6,7 @@ def geturl():
 	rurl = raw_input('\nAlbum title (your choice): ')
 	if (url[-11:] == '.tumblr.com' or '.tumblr.com' in url) and (url[-14:-11] != 'www'):
 		turl = 'tumblr'
-	elif '.com' not in url:
+	elif '.com' not in url and url[0] != '@':
 		turl = 'tumblr'
 		print '\nFinding '+ url +'\'s, tumblr this may take a while. \n'
 		return url, rurl, turl
