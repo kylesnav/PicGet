@@ -2,13 +2,15 @@ import urllib, re, os
 
 
 def geturl():
-	url = raw_input('\n\nEnter a url (all pages of a Tumblr are saved): ')
+	url = raw_input('\n\nEnter a url or an Instagram username (@example) (all pages of a Tumblr are saved): ')
 	rurl = raw_input('\nAlbum title (your choice): ')
 	if (url[-11:] == '.tumblr.com' or '.tumblr.com' in url) and (url[-14:-11] != 'www'):
 		turl = 'tumblr'
+	elif url[0] == '@':
+		turl = 'instagram'
 	else:
 		turl = 'url'
-	if url[0:7] != 'http://':
+	if url[0:7] != 'http://' and turl != 'instagram':
 		url = 'http://' + url
 	print '\n' + url + ' is will be saved as: ' + rurl
 	print '\nFinding '+ url +', this may take a while. \n'
@@ -43,7 +45,36 @@ def tumblrhtml(url):
 	html = fhtml
 	print str(x), 'pages of images being saved from:', name + '\n'
 	return html
-
+	
+def instagramhtml(url):
+		name = url
+		url = 'http://web.stagram.com/n/' + url[1:] + '/'
+		rhtml = urllib.urlopen(url)
+		rhtml = rhtml.read()
+		nhtml = ''
+		html = ''
+		for i in rhtml:
+			html += i
+			nhtml += i
+		next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
+		x = 1
+		while len(next) == 1: 
+			x += 1
+			page = next[0]
+			page = 'http://web.stagram.com' + page[9:-24]
+			rhtml = urllib.urlopen(page)
+			rhtml = rhtml.read()
+			nhtml = ''
+			for i in rhtml:
+				nhtml += i
+				html += i
+			next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml) 
+		print str(x), 'pages of images being saved from:', name + '\'s instagram.\n'
+		return html
+			
+			
+				
+			
 def getlinks(html):
 	png = re.findall(r"src='.+\.png'", html) + re.findall(r'src=".+\.png"', html)
 	jpg = re.findall(r"src='.+\.jpg'", html) + re.findall(r'src=".+\.jpg"', html)
@@ -86,18 +117,22 @@ def getimgs(imgs):
 	print '\nDownloading images, this may take a while. \n'
 	am = 0
 	for key in imgs.iterkeys():
-		urllib.urlretrieve(key, imgs[key])
-		stat = os.stat(imgs[key])
-		size = stat.st_size / 1000
-		if size < 5:
-			os.remove(imgs[key])
-		else:
-			am +=1
+		try:
+			urllib.urlretrieve(key, imgs[key])
+			stat = os.stat(imgs[key])
+			size = stat.st_size / 1000
+			if size < 5:
+				os.remove(imgs[key])
+			else:
+				am +=1
+		except IOError:
+			continue
 	print 'Success, found ' + str(am) + ' image(s)!\n'
 
 def main():
 	url, rurl, turl = geturl()
 	if turl == 'tumblr': html = tumblrhtml(url)
+	elif turl == 'instagram': html = instagramhtml(url)
 	else: html = gethtml(url)
 	imgs = getlinks(html)
 	finddir(rurl)
