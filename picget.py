@@ -3,7 +3,7 @@ import urllib, re, os
 def geturl():
 	url = raw_input('Enter a url: ')
 	rurl = raw_input('Album title (your choice): ')
-	if url[0:6] != 'http://':
+	if url[0:7] != 'http://':
 		url = 'http://' + url
 	print url + ' is being saved to: ' + rurl
 	return url, rurl
@@ -49,7 +49,6 @@ def finddir(rurl):
 		print '\n\nYou are now currently in %s' % os.getcwd()
 		print '\nThe current sub-directories are: %s' % os.listdir('.')
 		act = raw_input('\nIf this is the proper directory press enter, or type the name of the desired directory. ')
-		
 	os.mkdir(rurl)
 	os.chdir(rurl)
 	return
@@ -58,7 +57,12 @@ def finddir(rurl):
 def getimgs(imgs):
 	for key in imgs.iterkeys():
 		urllib.urlretrieve(key, imgs[key])
-	return 'Success!'
+		stat = os.stat(imgs[key])
+		size = stat.st_size / 1000
+		if size < 5:
+			os.remove(imgs[key])
+	print 'Success!'
+
 
 
 def main():
