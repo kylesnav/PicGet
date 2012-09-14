@@ -107,7 +107,6 @@ def getlinks(html):
 
 def finddir(rurl):
 	act = ' '
-	os.chdir('/Users')
 	print 'You are currently in %s' % os.getcwd()
 	print '\nThe current sub-directories are: %s' % os.listdir('.')
 	act = raw_input('\nPress enter, or type the name of the desired directory. ')
