@@ -2,12 +2,18 @@ import urllib, re, os
 
 
 def geturl():
-	url = raw_input('\n\nEnter a url or an Instagram username (@example) (all pages of a Tumblr are saved): ')
+	url = raw_input('\n\nEnter a url or an Instagram username (@example) or a tumblr username (example): ')
 	rurl = raw_input('\nAlbum title (your choice): ')
 	if (url[-11:] == '.tumblr.com' or '.tumblr.com' in url) and (url[-14:-11] != 'www'):
 		turl = 'tumblr'
+	elif '.com' not in url:
+		turl = 'tumblr'
+		print '\nFinding '+ url +'\'s, tumblr this may take a while. \n'
+		return url, rurl, turl
 	elif url[0] == '@':
 		turl = 'instagram'
+		print '\nFinding '+ url +'s, Instagram this may take a while. \n'
+		return url, rurl, turl
 	else:
 		turl = 'url'
 	if url[0:7] != 'http://' and turl != 'instagram':
@@ -27,6 +33,8 @@ def gethtml(url):
 
 def tumblrhtml(url):
 	name = url
+	if '.tumblr.com' not in url:
+		url = 'http://' + url + '.tumblr.com'
 	if url[-1] != '/':
 		url = url + '/page/'
 	else:
