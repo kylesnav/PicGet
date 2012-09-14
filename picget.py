@@ -2,20 +2,41 @@ import urllib, re, os
 
 
 def geturl():
-	url = raw_input('\n\nEnter a url: ')
+	url = raw_input('\n\nEnter a url (all pages of a Tumblr are saved): ')
 	rurl = raw_input('\nAlbum title (your choice): ')
 	if url[0:7] != 'http://':
 		url = 'http://' + url
-	print '\n' + url + ' is being saved as: ' + rurl
+	print '\n' + url + ' is will be saved as: ' + rurl
+	print '\nFinding '+ url +', this may take a while. \n'
 	return url, rurl
 
 
 def gethtml(url):
-	rhtml = urllib.urlopen(url)
-	rhtml = rhtml.read()
-	html = ''
-	for i in rhtml:
-		html += i
+	#tumblr
+	if url[-11:] == '.tumblr.com':
+		name = url
+		url = url + '/page/'
+		x = 0
+		fhtml = ''
+		while x >= 0:
+			x += 1
+			rhtml = urllib.urlopen(url + str(x))
+			rhtml = rhtml.read()
+			html = ''
+			for i in rhtml:
+				html += i
+			fhtml += html
+			if '"post-body' not in html:
+				break
+		html = fhtml
+		print str(x), 'pages of images being saved from:', name + '\n'
+	#not tumblr
+	else:
+		rhtml = urllib.urlopen(url)
+		rhtml = rhtml.read()
+		html = ''
+		for i in rhtml:
+			html += i
 	return html
 
 
@@ -37,35 +58,38 @@ def getlinks(html):
 		while t.find('/') != -1:
 			t = t[(t.find('/') + 1):]
 		imgs[i] = t
-	print '\nFound image(s).\n'
+	print 'Found ' + str(len(links)) + ' potential image(s).\n'
 	return imgs
 
 
 def finddir(rurl):
 	act = ' '
 	os.chdir('/Users')
-	print '\nYou are currently in %s' % os.getcwd()
+	print 'You are currently in %s' % os.getcwd()
 	print '\nThe current sub-directories are: %s' % os.listdir('.')
-	act = raw_input('\nIf this is the proper directory press enter, or type the name of the desired directory. ')
+	act = raw_input('\nPress enter, or type the name of the desired directory. ')
 	while act != '':
 		os.chdir(act)
 		print '\n\nYou are now currently in %s' % os.getcwd()
 		print '\nThe current sub-directories are: %s' % os.listdir('.')
-		act = raw_input('\nIf this is the proper directory press enter, or type the name of the desired directory. ')
+		act = raw_input('\nPress enter, or type the name of the desired directory. ')
 	os.mkdir(rurl)
 	os.chdir(rurl)
 	return
 
 
 def getimgs(imgs):
+	print '\nDownloading images, this may take a while. \n'
+	am = 0
 	for key in imgs.iterkeys():
 		urllib.urlretrieve(key, imgs[key])
 		stat = os.stat(imgs[key])
 		size = stat.st_size / 1000
 		if size < 5:
 			os.remove(imgs[key])
-	print '\nSuccess!\n'
-
+		else:
+			am +=1
+	print '\nSuccess, found ' + str(am) + ' image(s)!\n'
 
 def main():
 	url, rurl = geturl()
