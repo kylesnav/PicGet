@@ -1,12 +1,14 @@
 import urllib, re, os
 
+
 def geturl():
 	url = raw_input('Enter a url: ')
 	rurl = raw_input('Album title (your choice): ')
 	if url[0:7] != 'http://':
 		url = 'http://' + url
-	print url + ' is being saved to: ' + rurl
+	print url + ' is being saved as: ' + rurl
 	return url, rurl
+
 
 def gethtml(url):
 	rhtml = urllib.urlopen(url)
@@ -64,15 +66,12 @@ def getimgs(imgs):
 	print 'Success!'
 
 
-
 def main():
 	url, rurl = geturl()
 	html = gethtml(url)
 	imgs = getlinks(html)
 	finddir(rurl)
 	getimgs(imgs)
-
-
 
 
 if __name__ == '__main__':
