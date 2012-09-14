@@ -2,11 +2,11 @@ import urllib, re, os
 
 
 def geturl():
-	url = raw_input('Enter a url: ')
-	rurl = raw_input('Album title (your choice): ')
+	url = raw_input('\n\nEnter a url: ')
+	rurl = raw_input('\nAlbum title (your choice): ')
 	if url[0:7] != 'http://':
 		url = 'http://' + url
-	print url + ' is being saved as: ' + rurl
+	print '\n' + url + ' is being saved as: ' + rurl
 	return url, rurl
 
 
@@ -37,13 +37,14 @@ def getlinks(html):
 		while t.find('/') != -1:
 			t = t[(t.find('/') + 1):]
 		imgs[i] = t
+	print '\nFound image(s).\n'
 	return imgs
 
 
 def finddir(rurl):
 	act = ' '
 	os.chdir('/Users')
-	print '\n\nYou are currently in %s' % os.getcwd()
+	print '\nYou are currently in %s' % os.getcwd()
 	print '\nThe current sub-directories are: %s' % os.listdir('.')
 	act = raw_input('\nIf this is the proper directory press enter, or type the name of the desired directory. ')
 	while act != '':
@@ -63,7 +64,7 @@ def getimgs(imgs):
 		size = stat.st_size / 1000
 		if size < 5:
 			os.remove(imgs[key])
-	print 'Success!'
+	print '\nSuccess!\n'
 
 
 def main():
