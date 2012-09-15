@@ -53,7 +53,7 @@ def tumblrhtml(url):
 	html = fhtml
 	print str(x), 'pages of images being saved from:', name + '\n'
 	return html
-	
+
 def instagramhtml(url):
 		name = url
 		url = 'http://web.stagram.com/n/' + url[1:] + '/'
@@ -79,10 +79,10 @@ def instagramhtml(url):
 			next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml) 
 		print str(x), 'pages of images being saved from:', name + '\'s instagram.\n'
 		return html
-			
-			
-				
-			
+
+
+
+
 def getlinks(html):
 	png = re.findall(r"src='.+\.png'", html) + re.findall(r'src=".+\.png"', html)
 	jpg = re.findall(r"src='.+\.jpg'", html) + re.findall(r'src=".+\.jpg"', html)
