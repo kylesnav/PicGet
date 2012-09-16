@@ -12,6 +12,7 @@ def geturl():
 		return url, rurl, turl
 	elif url[0] == '@':
 		turl = 'instagram'
+		url = url[1:]
 		print '\nFinding '+ url +'\'s, Instagram this may take a while. \n'
 		return url, rurl, turl
 	else:
@@ -43,11 +44,7 @@ def tumblrhtml(url):
 	x = 0
 	fhtml = ''
 	while x >= 0:
-		rhtml = urllib.urlopen(url + str(x + 1))
-		rhtml = rhtml.read()
-		html = ''
-		for i in rhtml:
-			html += i
+		html = gethtml(url + str(x + 1))
 		fhtml += html
 		if '"post-body' not in html: break
 		else: x += 1
@@ -57,30 +54,21 @@ def tumblrhtml(url):
 
 
 def instagramhtml(url):
-		name = url
-		url = 'http://web.stagram.com/n/' + url[1:] + '/'
-		rhtml = urllib.urlopen(url)
-		rhtml = rhtml.read()
-		nhtml = ''
-		html = ''
-		for i in rhtml:
-			html += i
-			nhtml += i
+	name = url
+	url = 'http://web.stagram.com/n/' + url + '/'
+	nhtml = gethtml(url)
+	html = ''
+	next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
+	x = 0
+	while len(next) >= 1: 
+		x += 1
+		page = next[0]
+		page = 'http://web.stagram.com' + page[9:-24]
+		nhtml = gethtml(page)
+		html += nhtml
 		next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
-		x = 1
-		while len(next) == 1: 
-			x += 1
-			page = next[0]
-			page = 'http://web.stagram.com' + page[9:-24]
-			rhtml = urllib.urlopen(page)
-			rhtml = rhtml.read()
-			nhtml = ''
-			for i in rhtml:
-				nhtml += i
-				html += i
-			next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml) 
 		print str(x), 'pages of images being saved from:', name + '\'s instagram.\n'
-		return html
+	return html
 
 
 def getlinks(html):
