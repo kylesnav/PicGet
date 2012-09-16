@@ -31,6 +31,7 @@ def gethtml(url):
 		html += i
 	return html
 
+
 def tumblrhtml(url):
 	name = url
 	if '.tumblr.com' not in url:
@@ -53,6 +54,7 @@ def tumblrhtml(url):
 	html = fhtml
 	print str(x), 'pages of images being saved from:', name + '\n'
 	return html
+
 
 def instagramhtml(url):
 		name = url
@@ -79,8 +81,6 @@ def instagramhtml(url):
 			next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml) 
 		print str(x), 'pages of images being saved from:', name + '\'s instagram.\n'
 		return html
-
-
 
 
 def getlinks(html):
@@ -135,6 +135,7 @@ def getimgs(imgs):
 		except IOError:
 			continue
 	print 'Success, found ' + str(am) + ' image(s)!\n'
+
 
 def main():
 	url, rurl, turl = geturl()
