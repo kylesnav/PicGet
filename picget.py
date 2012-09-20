@@ -1,5 +1,8 @@
 import urllib, re, os
 
+url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
+name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
+
 def gethtml(url):
 	rhtml = urllib.urlopen(url)
 	rhtml = rhtml.read()
@@ -9,6 +12,7 @@ def gethtml(url):
 	return html
 
 def tumblrhtml(url):
+    # add filter for retrieving only body context.
     url = 'http://' + url + '.tumblr.com/page/'
     x = 0
     html = ''
@@ -21,6 +25,7 @@ def tumblrhtml(url):
     return html
 
 def instagramhtml(url):
+    # add filter for retrieving only body context.
 	url = 'http://web.stagram.com/n/' + url + '/'
 	nhtml = gethtml(url)
 	html = nhtml
@@ -38,6 +43,7 @@ def getlinks(html):
     ohtml = html
     links = []
     imgs = {}
+    # Repair
     while html.find('"') != -1:
         p = html.find('src="')
         html = html[p+5:]
@@ -56,6 +62,7 @@ def getlinks(html):
         if 'http://' in link and link not in links:
             if '.js' not in link and link[-4] == '.': links.append(link)
         else: continue
+    # /Repair
 	for i in links:
 		t = i
 		while t.find('/') != -1:
@@ -78,8 +85,8 @@ def getimgs(imgs):
 		except IOError: continue
 
 def main():
-	url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
-	name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
+	# url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
+	# name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
 	if urltype == 'tumblr': html = tumblrhtml(url)
 	elif urltype == 'instagram': html = instagramhtml(url)
 	else: html = gethtml(url)
