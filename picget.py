@@ -1,7 +1,9 @@
 import urllib, re, os
 
-url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
-name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
+url = 'http://cnn.com' # Insert URL, Instagram username (example: 'kylesnav'), or Tumblr username (example: 'whdime')
+urltype = 'url' # If Tumblr insert 'tumblr', if Instagram insert 'instagram', or just leave as is for a normal URL.
+name = 'cnn' # Name of the folder that will be created with the pics inside.
+location = '/Users/kylesnav/Desktop' # Location where you would like the folder to be created.
 
 def gethtml(url):
 	rhtml = urllib.urlopen(url)
