@@ -9,16 +9,16 @@ def gethtml(url):
 	return html
 
 def tumblrhtml(url):
-	url = 'http://' + url + '.tumblr.com/page/'
-	x = 0
-	fhtml = ''
-	while x >= 0:
-		html = gethtml(url + str(x + 1))
-		fhtml += html
-		if '"post-body ' not in html: break
-		else: x += 1
-	html = fhtml
-	return html
+    url = 'http://' + url + '.tumblr.com/page/'
+    x = 0
+    html = ''
+    while True:
+    	ohtml = gethtml(url + str(x + 1))
+        html += ohtml
+        if '"post-body ' not in ohtml: break
+        x += 1
+        print x
+    return html
 
 def instagramhtml(url):
 	url = 'http://web.stagram.com/n/' + url + '/'
@@ -45,10 +45,8 @@ def getlinks(html):
         link = html[:pp]
         html = html[pp:]
         if 'http://' in link and link not in links:
-            if '.js' not in link and link[-4] == '.':
-                links.append(link)
-        else:
-            continue   
+            if '.js' not in link and link[-4] == '.': links.append(link)
+        else: continue   
     while ohtml.find('"') != -1:
         p = ohtml.find('href="')
         ohtml = ohtml[p+6:]
@@ -56,10 +54,8 @@ def getlinks(html):
         link = ohtml[:pp]
         ohtml = ohtml[pp:]
         if 'http://' in link and link not in links:
-            if '.js' not in link and link[-4] == '.':
-                links.append(link)
-        else:
-            continue
+            if '.js' not in link and link[-4] == '.': links.append(link)
+        else: continue
 	for i in links:
 		t = i
 		while t.find('/') != -1:
@@ -73,28 +69,20 @@ def editdir(name, location):
 	os.chdir(name)
 
 def getimgs(imgs):
-	am = 0
 	for key in imgs.iterkeys():
 		try:
 			urllib.urlretrieve(key, imgs[key])
 			stat = os.stat(imgs[key])
 			size = stat.st_size / 1000
-			if size < 1:
-				os.remove(imgs[key])
-			else:
-				am +=1
-		except IOError:
-			continue
+			if size < 1: os.remove(imgs[key])
+		except IOError: continue
 
 def main():
 	url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
-	name, location = 'PicGet', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
-	if urltype == 'tumblr':
-		html = tumblrhtml(url)
-	elif urltype == 'instagram':
-		html = instagramhtml(url)
-	else:
-		html = gethtml(url)
+	name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
+	if urltype == 'tumblr': html = tumblrhtml(url)
+	elif urltype == 'instagram': html = instagramhtml(url)
+	else: html = gethtml(url)
 	editdir(name, location)
 	imgs = getlinks(html)
 	getimgs(imgs)
