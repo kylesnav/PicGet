@@ -6,12 +6,12 @@ name = 'cnn' # Name of the folder that will be created with the pics inside.
 location = '/Users/kylesnav/Desktop' # Location where you would like the folder to be created.
 
 def gethtml(url):
-	rhtml = urllib.urlopen(url)
-	rhtml = rhtml.read()
-	html = ''
-	for i in rhtml:
-		html += i
-	return html
+    rhtml = urllib.urlopen(url)
+    rhtml = rhtml.read()
+    html = ''
+    for i in rhtml:
+    	html += i
+    return html
 
 def tumblrhtml(url):
     # add filter for retrieving only body context.
@@ -19,7 +19,7 @@ def tumblrhtml(url):
     x = 0
     html = ''
     while True:
-    	ohtml = gethtml(url + str(x + 1))
+        ohtml = gethtml(url + str(x + 1))
         html += ohtml
         if '"post-body ' not in ohtml: break
         x += 1
@@ -28,17 +28,17 @@ def tumblrhtml(url):
 
 def instagramhtml(url):
     # add filter for retrieving only body context.
-	url = 'http://web.stagram.com/n/' + url + '/'
-	nhtml = gethtml(url)
-	html = nhtml
-	next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
-	while len(next) >= 1: 
-		page = next[0]
-		page = 'http://web.stagram.com' + page[9:-24]
-		nhtml = gethtml(page)
-		html += nhtml
-		next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
-	return html
+    url = 'http://web.stagram.com/n/' + url + '/'
+    nhtml = gethtml(url)
+    html = nhtml
+    next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
+    while len(next) >= 1: 
+        page = next[0]
+        page = 'http://web.stagram.com' + page[9:-24]
+        nhtml = gethtml(page)
+        html += nhtml
+        next = re.findall('<a href="/n/.+/.+" rel="next">Earlier</a>', nhtml)
+    return html
 
 def getlinks(html):
     html = html
@@ -65,12 +65,12 @@ def getlinks(html):
             if '.js' not in link and link[-4] == '.': links.append(link)
         else: continue
     # /Repair
-	for i in links:
-		t = i
-		while t.find('/') != -1:
-			t = t[(t.find('/') + 1):]
-		imgs[i] = t
-	return imgs
+    for i in links:
+        t = i
+        while t.find('/') != -1:
+            t = t[(t.find('/') + 1):]
+        imgs[i] = t
+    return imgs
 
 def editdir(name, location):
 	os.chdir(location)
@@ -78,23 +78,23 @@ def editdir(name, location):
 	os.chdir(name)
 
 def getimgs(imgs):
-	for key in imgs.iterkeys():
-		try:
+    for key in imgs.iterkeys():
+        try:
             urllib.urlretrieve(key, imgs[key])
             stat = os.stat(imgs[key])
             size = stat.st_size / 1000
             if size < 1: os.remove(imgs[key])
-		except IOError: continue
+    except IOError: continue
 
 def main():
-	# url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
-	# name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
-	if urltype == 'tumblr': html = tumblrhtml(url)
-	elif urltype == 'instagram': html = instagramhtml(url)
-	else: html = gethtml(url)
-	editdir(name, location)
-	imgs = getlinks(html)
-	getimgs(imgs)
+    # url, urltype = 'whdime', 'tumblr' # URL (or Instagram/Tumblr username) and URL type, leave as is if not a 'tumblr' or 'instagram'.
+    # name, location = 'whdime', '/Users/kylesnav/Desktop' # Name of the will be created folder (your choice) and location
+    if urltype == 'tumblr': html = tumblrhtml(url)
+    elif urltype == 'instagram': html = instagramhtml(url)
+    else: html = gethtml(url)
+    editdir(name, location)
+    imgs = getlinks(html)
+    getimgs(imgs)
 
 if __name__ == '__main__':
 	main()
