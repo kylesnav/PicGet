@@ -80,10 +80,10 @@ def editdir(name, location):
 def getimgs(imgs):
 	for key in imgs.iterkeys():
 		try:
-			urllib.urlretrieve(key, imgs[key])
-			stat = os.stat(imgs[key])
-			size = stat.st_size / 1000
-			if size < 1: os.remove(imgs[key])
+            urllib.urlretrieve(key, imgs[key])
+            stat = os.stat(imgs[key])
+            size = stat.st_size / 1000
+            if size < 1: os.remove(imgs[key])
 		except IOError: continue
 
 def main():
